@@ -1,4 +1,3 @@
-
 # Spring OAuth with API Gateway
 
 ## Getting Started
@@ -125,3 +124,7 @@ If everything is good you should see the HTTP-200 and the response similar as be
 
 And from PostMan
 ![alt text](img/result_postman.JPG)
+
+# Managed Services
+Service Registry: [Eureka](http://localhost:8761)
+Tracing: [Zipkin](http://localhost:9411/)
