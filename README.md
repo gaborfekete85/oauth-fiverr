@@ -126,5 +126,6 @@ And from PostMan
 ![alt text](img/result_postman.JPG)
 
 # Managed Services
-Service Registry: [Eureka](http://localhost:8761)
-Tracing: [Zipkin](http://localhost:9411/)
+* Service Registry: [Eureka](http://localhost:8761)
+* Tracing: [Zipkin](http://localhost:9411/)
+* Latency and Fault tolerance: [Hystrix](http://localhost:7979/hystrix)
