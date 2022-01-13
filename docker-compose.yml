@@ -1,0 +1,69 @@
+version: '3'
+services:
+  eureka-service:
+    image: fiverr/okta-eureka-server:latest
+    container_name: eureka-service
+    expose:
+      - "8761"
+    ports:
+      - "127.0.0.1:8761:8761"
+  gateway-service:
+    image: fiverr/okta-gateway-service:latest
+    container_name: gateway-service
+    expose:
+      - "8080"
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      - eureka-service
+    environment:
+      EUREKA_ZONE: http://eureka-service:8761/eureka/
+      ZIPKIN_BASE_URL: http://zipkin-service:9411
+      OKTA_CLIENT_ID: ${OKTA_CLIENT_ID}
+      OKTA_CLIENT_SECRET: ${OKTA_CLIENT_SECRET}
+      EXCHANGE_CLIENT_ID: ${EXCHANGE_CLIENT_ID}
+      EXCHANGE_CLIENT_SECRET: ${EXCHANGE_CLIENT_SECRET}
+  stock-service:
+    image: fiverr/okta-stock-service:latest
+    container_name: stock-service
+    expose:
+      - "8081"
+    ports:
+      - "127.0.0.1:8081:8081"
+    depends_on:
+      - eureka-service
+      - gateway-service
+    environment:
+      EUREKA_ZONE: http://eureka-service:8761/eureka/
+      ZIPKIN_BASE_URL: http://zipkin-service:9411
+      EXCHANGE_CLIENT_ID: ${EXCHANGE_CLIENT_ID}
+      EXCHANGE_CLIENT_SECRET: ${EXCHANGE_CLIENT_SECRET}
+  exchange-service:
+    image: fiverr/okta-exchange-service:latest
+    container_name: exchange-service
+    expose:
+      - "8082"
+    ports:
+      - "127.0.0.1:8082:8082"      
+    depends_on:
+      - eureka-service
+      - gateway-service
+    environment:
+      EUREKA_ZONE: http://eureka-service:8761/eureka/
+      ZIPKIN_BASE_URL: http://zipkin-service:9411
+  hystrix-service:
+    image: fiverr/hystrix-dashboard:latest
+    container_name: hystrix
+    expose:
+      - "7979"
+    ports:
+      - "7979:7979"
+    depends_on:
+      - gateway-service
+  zipkin-service:
+    image: openzipkin/zipkin
+    container_name: zipkin-service
+    expose:
+      - "9411"
+    ports:
+      - "9411:9411"

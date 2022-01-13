@@ -1,0 +1,31 @@
+https://${yourOktaDomain}/oauth2/v1/authorize?client_id=0oan47pj9BsB30h7&response_type=token&response_mode=fragment&scope=okta.users.read&redirect_uri=${yourConfiguredRedirectUri}&nonce=UBGW&state=1234
+
+https://feketegabor.okta.com/oauth2/default/authorize?client_id=0oabsgpx3c1mF4HJx696&response_type=token&response_mode=fragment&redirect_uri=https://feketegabor.okta.com/login/oauth2/code/okta&nonce=UBGW&state=1234
+
+https://feketegabor.okta.com/oauth2/v1/authorize?client_id=0oabsgpx3c1mF4HJx696&response_type=token&response_mode=fragment&redirect_uri=http://localhost:8080/login/oauth2/code/okta&nonce=UBGW&state=1234
+
+https://feketegabor.okta.com/oauth2/default/v1/authorize?client_id=0oabsgpx3c1mF4HJx696&response_type=code&response_mode=fragment&redirect_uri=http://localhost:8080/login/oauth2/code/okta&nonce=UBGW&state=1234&scope=openid
+
+
+,address,phone,device_sso
+
+https://feketegabor.okta.com/oauth2/v1/authorize?client_id=0oabsgpx3c1mF4HJx696&response_type=token&response_mode=fragment&redirect_uri=https://feketegabor-admin.okta.com/admin/app/oidc_client/instance/0oabsgpx3c1mF4HJx696#tab-general&nonce=UBGW&state=1234
+
+
+# Authorization request
+https://${yourOktaDomain}/oauth2/default/v1/authorize?client_id=0oabucvy
+c38HLL1ef0h7&response_type=code&scope=openid&redirect_uri=https%3A%2F%2Fexample.com&state=state-296bc9a0-a2a2-4a57-be1a-d0e2fd9bb601
+
+# Response:
+http://localhost:8080/?code=P5I7mdxxdv13_JfXrCSq&state=state-296bc9a0-a2a2-4a57-be1a-d0e2fd9bb601
+
+# Get the token
+curl --request POST \
+  --url https://feketegabor.okta.com/oauth2/default/v1/token \
+  --header 'accept: application/json' \
+  --header 'authorization: Basic MG9hYnNncHgzYzFtRjRISng2OTY6MndVcWpwaE9SR3NtMkxkaTYzSDNkdzhObFVMMmtuQWU2dXBYVGNEdg' \
+  --header 'content-type: application/x-www-form-urlencoded' \
+  --data 'grant_type=authorization_code&redirect_uri=http://localhost:8080/login/oauth2/code/okta&code=nuKMygyZPwU3UJyHj7w7rr6p0N487E5ptgMRf9vr9EM&state=1234'
+
+# Validation
+https://feketegabor.okta.com/oauth2/default/v1/introspect

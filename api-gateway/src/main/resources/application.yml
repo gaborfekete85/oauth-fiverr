@@ -1,0 +1,104 @@
+okta:
+  oauth2:
+    issuer: https://feketegabor.okta.com/oauth2/default
+    client-id: 0oabsgpx3c1mF4HJx696
+    client-secret: 2wUqjphORGsm2Ldi63H3dw8NlUL2knAe6upXTcDv
+    client-name: "Okta Authorization Service"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: "${EUREKA_ZONE:http://localhost:8761/eureka/}"
+
+app:
+  introspectUrl: "https://feketegabor.okta.com/oauth2/default/v1/introspect?token_type_hint=access_token&token=%s"
+
+spring:
+  #datasource:
+  #  url: ${DATASOURCE_URL:jdbc:postgresql://localhost:30001/postgres?currentSchema=sessions}
+  #  username: ${DATASOURCE_USER:postgres}
+  #  password: ${DATASOURCE_PASSWORD:postgres}
+  #jpa:
+  #  show-sql: true
+  #  hibernate:
+  #    ddl-auto: create-drop
+  #    naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+  #  properties:
+  #    hibernate:
+  #      dialect: org.hibernate.dialect.PostgreSQLDialect
+  #      format_sql: true
+  #      ddl-auto: none
+  #      jdbc:
+  #        lob:
+  #          non_contextual_creation: true
+  #session:
+  #  store-type: jdbc
+  application:
+    name: gateway
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.actuate.autoconfigure.security.reactive.ReactiveManagementWebSecurityAutoConfiguration
+      # - org.springframework.boot.autoconfigure.session.SessionAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://feketegabor.okta.com/oauth2/default
+      client:
+        registration:
+          okta-web:
+            provider: okta
+            client-name: "Okta Gateway Client"
+            client-authentication-method: post
+            authorization-grant-type: authorization_code
+            client-id: ${OKTA_CLIENT_ID:0oabsgpx3c1mF4HJx696}
+            client-secret: ${OKTA_CLIENT_SECRET:2wUqjphORGsm2Ldi63H3dw8NlUL2knAe6upXTcDv}
+            redirect-uri: "{baseUrl}/login/oauth2/code/okta"
+          pricing-client:
+            provider: okta
+            authorization-grant-type: client_credentials
+            client-name: "Booking Service Client"
+#            client-authentication-method: post
+            scope: pricing
+            client-id: ${EXCHANGE_CLIENT_ID:0oabtaqwv7wsP2PdC696}
+            client-secret: ${EXCHANGE_CLIENT_SECRET:B0IO0ubogBtn84ie-ahlwt_H4s4l05ZCeUluzGTB}
+        provider:
+          okta:
+            issuer-uri: https://feketegabor.okta.com/oauth2/default
+  cloud:
+    gateway:
+      routes:
+        - id: stock-service
+          uri: lb://stock-service
+          predicates:
+            - Path=/order/**
+          filters:
+            - TokenRelay=
+            - StripPrefix=0
+            #- name: Retry
+            #  args:
+            #    retries: 3
+            #    statuses: UNAUTHORIZED
+            #    methods: GET,POST
+            #    backoff:
+            #      firstBackoff: 10ms
+            #      maxBackoff: 50ms
+            #      factor: 2
+            #      basedOnPreviousValue: false
+      discovery:
+        locator:
+          enabled: true
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    baseUrl: ${ZIPKIN_BASE_URL:http://localhost:9411}
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.okta.developer: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: DEBUG

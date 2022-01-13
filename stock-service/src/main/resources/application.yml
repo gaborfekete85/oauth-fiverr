@@ -1,0 +1,47 @@
+server:
+  port: 8081
+
+eureka:
+  client:
+    service-url:
+      defaultZone: "${EUREKA_ZONE:http://localhost:8761/eureka/}"
+
+okta:
+  oauth2:
+    issuer: https://feketegabor.okta.com/oauth2/default
+    audience: api://default
+
+spring:
+  application:
+    name: stock-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://feketegabor.okta.com/oauth2/default
+      client:
+        registration:
+          pricing-client:
+            provider: okta
+            authorization-grant-type: client_credentials
+            scope: pricing
+            client-id: ${EXCHANGE_CLIENT_ID:0oabtaqwv7wsP2PdC696}
+            client-secret: ${EXCHANGE_CLIENT_SECRET:B0IO0ubogBtn84ie-ahlwt_H4s4l05ZCeUluzGTB}
+        provider:
+          okta:
+            issuer-uri: https://feketegabor.okta.com/oauth2/default
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    baseUrl: ${ZIPKIN_BASE_URL:http://localhost:9411}
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.okta.developer: DEBUG
+    org.springframework.web: DEBUG
