@@ -8,7 +8,7 @@ eureka:
 
 okta:
   oauth2:
-    issuer: https://feketegabor.okta.com/oauth2/default
+    issuer: "${ISSUER_URI:https://feketegabor.okta.com/oauth2/default}"
     audience: api://default
 
 spring:
@@ -18,7 +18,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://feketegabor.okta.com/oauth2/default
+          issuer-uri: "${ISSUER_URI:https://feketegabor.okta.com/oauth2/default}"
       client:
         registration:
           pricing-client:
@@ -29,7 +29,7 @@ spring:
             client-secret: ${EXCHANGE_CLIENT_SECRET:B0IO0ubogBtn84ie-ahlwt_H4s4l05ZCeUluzGTB}
         provider:
           okta:
-            issuer-uri: https://feketegabor.okta.com/oauth2/default
+            issuer-uri: "${ISSUER_URI:https://feketegabor.okta.com/oauth2/default}"
   cloud:
     loadbalancer:
       ribbon:

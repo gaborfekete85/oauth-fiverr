@@ -17,6 +17,8 @@ services:
     depends_on:
       - eureka-service
     environment:
+      INTROSPECT_URL: ${INTROSPECT_URL}
+      ISSUER_URI: ${ISSUER_URI}
       EUREKA_ZONE: http://eureka-service:8761/eureka/
       ZIPKIN_BASE_URL: http://zipkin-service:9411
       OKTA_CLIENT_ID: ${OKTA_CLIENT_ID}
@@ -34,6 +36,7 @@ services:
       - eureka-service
       - gateway-service
     environment:
+      ISSUER_URI: ${ISSUER_URI}
       EUREKA_ZONE: http://eureka-service:8761/eureka/
       ZIPKIN_BASE_URL: http://zipkin-service:9411
       EXCHANGE_CLIENT_ID: ${EXCHANGE_CLIENT_ID}
@@ -49,6 +52,7 @@ services:
       - eureka-service
       - gateway-service
     environment:
+      ISSUER_URI: ${ISSUER_URI}
       EUREKA_ZONE: http://eureka-service:8761/eureka/
       ZIPKIN_BASE_URL: http://zipkin-service:9411
   hystrix-service:

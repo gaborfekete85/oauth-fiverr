@@ -17,7 +17,7 @@ spring:
 
 okta:
   oauth2:
-    issuer: https://feketegabor.okta.com/oauth2/default
+    issuer: "${ISSUER_URI:https://feketegabor.okta.com/oauth2/default}"
     audience: api://default
 
 logging:

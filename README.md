@@ -9,6 +9,15 @@ Log in to your Okta Developer account (or [sign up](https://developer.okta.com/s
 After login switch to Admin mode by clicking the 'Admin' button in the top navigation bar
 ![alt text](https://feketegabor.com/images/admin.jpg)
 
+## Configure the Okta registration
+Copy the highlighted part of the URL from your browser
+![alt text](https://feketegabor.com/images/okta_url.png)
+
+AND Paste into the `launch.sh` file to the highlighted place
+![alt text](https://feketegabor.com/images/replace_url.JPG)
+
+* **IMPORTANT**: Make sure to replace in the `ISSUER_URI` AND in the **`INTROSPECT_URL`** as well. 
+
 You will need to enable 2nd Factor authentication to access the Admin console of Okta. 
 *I downloaded the Okta Verify application on my phone and connected by QR code*
 

@@ -1,6 +1,6 @@
 okta:
   oauth2:
-    issuer: https://feketegabor.okta.com/oauth2/default
+    issuer: "${ISSUER_URI:https://feketegabor.okta.com/oauth2/default}"
     client-id: 0oabsgpx3c1mF4HJx696
     client-secret: 2wUqjphORGsm2Ldi63H3dw8NlUL2knAe6upXTcDv
     client-name: "Okta Authorization Service"
@@ -11,7 +11,7 @@ eureka:
       defaultZone: "${EUREKA_ZONE:http://localhost:8761/eureka/}"
 
 app:
-  introspectUrl: "https://feketegabor.okta.com/oauth2/default/v1/introspect?token_type_hint=access_token&token=%s"
+  introspectUrl: "${INTROSPECT_URL:https://feketegabor.okta.com/oauth2/default/v1/introspect?token_type_hint=access_token&token=%s}"
 
 spring:
   #datasource:
@@ -44,7 +44,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://feketegabor.okta.com/oauth2/default
+          issuer-uri: "${ISSUER_URI:https://feketegabor.okta.com/oauth2/default}"
       client:
         registration:
           okta-web:
@@ -65,7 +65,7 @@ spring:
             client-secret: ${EXCHANGE_CLIENT_SECRET:B0IO0ubogBtn84ie-ahlwt_H4s4l05ZCeUluzGTB}
         provider:
           okta:
-            issuer-uri: https://feketegabor.okta.com/oauth2/default
+            issuer-uri: "${ISSUER_URI:https://feketegabor.okta.com/oauth2/default}"
   cloud:
     gateway:
       routes:

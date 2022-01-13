@@ -48,7 +48,7 @@ public class TokenPreFilter implements GlobalFilter {
     public void processRequest(ServerWebExchange exchange) {
         String token = exchange.getRequest().getHeaders().get("Authorization").get(0).toString();
         logger.info("Populating access token: " + token);
-        if(!checkToken(token)) {
+        if(!isTokenValid(token)) {
             logger.error("Token needs to be updated ! Request a new Access token !");
             refreshToken(exchange.getRequest().getCookies().get("SESSION").get(0).getValue());
         } else {
@@ -56,7 +56,7 @@ public class TokenPreFilter implements GlobalFilter {
         }
     }
 
-    private boolean checkToken(String jwtToken) {
+    private boolean isTokenValid(String jwtToken) {
         // create headers
         HttpHeaders headers = new HttpHeaders();
         // set `content-type` header
