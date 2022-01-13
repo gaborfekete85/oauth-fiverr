@@ -11,7 +11,7 @@ After login switch to Admin mode by clicking the 'Admin' button in the top navig
 
 ## Configure the Okta registration
 Copy the highlighted part of the URL from your browser
-![alt text](https://feketegabor.com/images/okta_url.png)
+![alt text](img/okta_url.png)
 
 AND Paste into the `launch.sh` file to the highlighted place
 ![alt text](https://feketegabor.com/images/replace_url.JPG)
