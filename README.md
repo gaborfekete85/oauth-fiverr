@@ -8,6 +8,9 @@
 * Docker
 * *IDE: IntelliJ*
 
+## Architecture overview
+![alt text](img/architecture.JPG)
+
 ## Signup to Okta
 Log in to your Okta Developer account (or [sign up](https://developer.okta.com/signup/) if you don’t have an account).
 
