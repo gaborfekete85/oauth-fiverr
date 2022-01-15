@@ -1,6 +1,7 @@
 package com.aks.stockservice.model;
 
 import lombok.Data;
+
 import java.math.BigDecimal;
 
 @Data

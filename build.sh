@@ -27,10 +27,3 @@ cd exchange-service
 mvn clean install
 docker image build -t fiverr/okta-exchange-service .
 cd ..
-
-echo "Building hystrix-dashboard"
-cd hystrix-dashboard
-#./mvnw clean install
-mvn clean install
-docker image build -t fiverr/okta-hystrix-dashboard .
-cd ..

@@ -1,6 +1,10 @@
 package com.aks.gateway.filter;
 
+import com.aks.gateway.filter.domain.AccessTokenResponse;
 import com.aks.gateway.filter.domain.TokenValidationResponse;
+import com.okta.jwt.AccessTokenVerifier;
+import com.okta.jwt.Jwt;
+import com.okta.jwt.JwtVerificationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +25,8 @@ import java.util.Map;
 
 @Component
 @Order(1000)
-public class TokenPreFilter implements GlobalFilter {
+//implements GlobalFilter
+public class TokenPreFilter {
 
     final Logger logger = LoggerFactory.getLogger(TokenPreFilter.class);
 
@@ -35,9 +40,12 @@ public class TokenPreFilter implements GlobalFilter {
     private String introspectUrl;
 
     @Autowired
+    private AccessTokenVerifier jwtVerifier;
+
+    @Autowired
     RestTemplate restTemplate;
 
-    @Override
+//    @Override
     public Mono<Void> filter(
             ServerWebExchange exchange,
             GatewayFilterChain chain) {
@@ -48,12 +56,23 @@ public class TokenPreFilter implements GlobalFilter {
     public void processRequest(ServerWebExchange exchange) {
         String token = exchange.getRequest().getHeaders().get("Authorization").get(0).toString();
         logger.info("Populating access token: " + token);
-        if(!isTokenValid(token)) {
+        if(!isTokenValidOkta(token)) {
             logger.error("Token needs to be updated ! Request a new Access token !");
             refreshToken(exchange.getRequest().getCookies().get("SESSION").get(0).getValue());
         } else {
             logger.info("Token is active !");
         }
+    }
+
+    private boolean isTokenValidOkta(String jwtToken) {
+        boolean result = true;
+        try {
+            Jwt jwt = jwtVerifier.decode(jwtToken.substring(7));
+        } catch (JwtVerificationException e) {
+            e.printStackTrace();
+            result = false;
+        }
+        return result;
     }
 
     private boolean isTokenValid(String jwtToken) {
@@ -70,18 +89,19 @@ public class TokenPreFilter implements GlobalFilter {
         return response.getBody().isActive();
     }
 
-    public void refreshToken(String sessionId) {
+    public String refreshToken(String sessionId) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cookie", "SESSION=" + sessionId);
-        headers.setAccept(List.of(MediaType.TEXT_HTML));
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         String url = "http://localhost:8080/refresh";
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
+        ResponseEntity<AccessTokenResponse> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, AccessTokenResponse.class);
         if(response.getStatusCode() == HttpStatus.OK) {
             logger.info("Token refreshed");
         } else {
             logger.error("Token refresh FAILED");
         }
+        return response.getBody().getAccessToken();
     }
 }

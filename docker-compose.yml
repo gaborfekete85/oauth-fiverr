@@ -17,7 +17,6 @@ services:
     depends_on:
       - eureka-service
     environment:
-      INTROSPECT_URL: ${INTROSPECT_URL}
       ISSUER_URI: ${ISSUER_URI}
       EUREKA_ZONE: http://eureka-service:8761/eureka/
       ZIPKIN_BASE_URL: http://zipkin-service:9411
@@ -47,7 +46,7 @@ services:
     expose:
       - "8082"
     ports:
-      - "127.0.0.1:8082:8082"      
+      - "127.0.0.1:8082:8082"
     depends_on:
       - eureka-service
       - gateway-service
@@ -55,15 +54,6 @@ services:
       ISSUER_URI: ${ISSUER_URI}
       EUREKA_ZONE: http://eureka-service:8761/eureka/
       ZIPKIN_BASE_URL: http://zipkin-service:9411
-  hystrix-service:
-    image: fiverr/hystrix-dashboard:latest
-    container_name: hystrix
-    expose:
-      - "7979"
-    ports:
-      - "7979:7979"
-    depends_on:
-      - gateway-service
   zipkin-service:
     image: openzipkin/zipkin
     container_name: zipkin-service

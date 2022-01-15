@@ -1,9 +1,15 @@
 okta:
   oauth2:
-    issuer: "${ISSUER_URI:https://feketegabor.okta.com/oauth2/default}"
-    client-id: 0oabsgpx3c1mF4HJx696
-    client-secret: 2wUqjphORGsm2Ldi63H3dw8NlUL2knAe6upXTcDv
+    issuer: ${ISSUER_URI:https://feketegabor.okta.com/oauth2/default}
+    client-id: ${OKTA_CLIENT_ID:0oabsgpx3c1mF4HJx696}
+    client-secret: ${OKTA_CLIENT_SECRET:2wUqjphORGsm2Ldi63H3dw8NlUL2knAe6upXTcDv}
     client-name: "Okta Authorization Service"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 eureka:
   client:
@@ -11,35 +17,14 @@ eureka:
       defaultZone: "${EUREKA_ZONE:http://localhost:8761/eureka/}"
 
 app:
-  introspectUrl: "${INTROSPECT_URL:https://feketegabor.okta.com/oauth2/default/v1/introspect?token_type_hint=access_token&token=%s}"
+  introspectUrl: "${ISSUER_URI}/v1/introspect?token_type_hint=access_token&token=%s"
 
 spring:
-  #datasource:
-  #  url: ${DATASOURCE_URL:jdbc:postgresql://localhost:30001/postgres?currentSchema=sessions}
-  #  username: ${DATASOURCE_USER:postgres}
-  #  password: ${DATASOURCE_PASSWORD:postgres}
-  #jpa:
-  #  show-sql: true
-  #  hibernate:
-  #    ddl-auto: create-drop
-  #    naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-  #  properties:
-  #    hibernate:
-  #      dialect: org.hibernate.dialect.PostgreSQLDialect
-  #      format_sql: true
-  #      ddl-auto: none
-  #      jdbc:
-  #        lob:
-  #          non_contextual_creation: true
-  #session:
-  #  store-type: jdbc
   application:
     name: gateway
   autoconfigure:
     exclude:
       - org.springframework.boot.actuate.autoconfigure.security.reactive.ReactiveManagementWebSecurityAutoConfiguration
-      # - org.springframework.boot.autoconfigure.session.SessionAutoConfiguration
-      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
   security:
     oauth2:
       resourceserver:
@@ -59,7 +44,6 @@ spring:
             provider: okta
             authorization-grant-type: client_credentials
             client-name: "Booking Service Client"
-#            client-authentication-method: post
             scope: pricing
             client-id: ${EXCHANGE_CLIENT_ID:0oabtaqwv7wsP2PdC696}
             client-secret: ${EXCHANGE_CLIENT_SECRET:B0IO0ubogBtn84ie-ahlwt_H4s4l05ZCeUluzGTB}
@@ -76,16 +60,16 @@ spring:
           filters:
             - TokenRelay=
             - StripPrefix=0
-            #- name: Retry
-            #  args:
-            #    retries: 3
-            #    statuses: UNAUTHORIZED
-            #    methods: GET,POST
-            #    backoff:
-            #      firstBackoff: 10ms
-            #      maxBackoff: 50ms
-            #      factor: 2
-            #      basedOnPreviousValue: false
+            - name: Retry
+              args:
+                retries: 1
+                statuses: UNAUTHORIZED
+                methods: GET,POST
+                backoff:
+                  firstBackoff: 10ms
+                  maxBackoff: 50ms
+                  factor: 2
+                  basedOnPreviousValue: false
       discovery:
         locator:
           enabled: true

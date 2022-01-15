@@ -10,8 +10,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     protected void configure(HttpSecurity http) throws Exception {
         http
-          .authorizeRequests(authorize -> authorize
-                  .mvcMatchers("/cart/**").hasAuthority("SCOPE_email")
+         .authorizeRequests(authorize -> authorize
+                  .mvcMatchers("/order/**").hasAuthority("SCOPE_email")
                   .anyRequest().authenticated()
           )
           .oauth2Login().and()

@@ -1,8 +1,14 @@
+
 # Spring OAuth with API Gateway
 
 ## Getting Started
+## Pre Requisites
+* Java 11+
+* Maven installed ( configured using JAVA_HOME above )
+* Docker
+* *IDE: IntelliJ*
 
-### Signup to Okta
+## Signup to Okta
 Log in to your Okta Developer account (or [sign up](https://developer.okta.com/signup/) if you don’t have an account).
 
 After login switch to Admin mode by clicking the 'Admin' button in the top navigation bar
@@ -15,7 +21,7 @@ Copy the highlighted part of the URL from your browser
 AND Paste into the `launch.sh` file to the highlighted place
 ![alt text](img/replace_url.JPG)
 
-* **IMPORTANT**: Make sure to replace in the `ISSUER_URI` AND in the **`INTROSPECT_URL`** as well. 
+* **IMPORTANT**: Make sure to replace the `ISSUER_URI`. 
 
 You will need to enable 2nd Factor authentication to access the Admin console of Okta. 
 *I downloaded the Okta Verify application on my phone and connected by QR code*
@@ -98,7 +104,6 @@ Go to the root of the application and open a `Git Bash` or `Terminal` on Mac
 - API Gateway
 - Stock Service
 - Exchange Service
-- Hystrix: Gateway circuit breaker console
 - Zipkin: Distributed tracing system
 
 # Test
@@ -128,4 +133,3 @@ And from PostMan
 # Managed Services
 * Service Registry: [Eureka](http://localhost:8761)
 * Tracing: [Zipkin](http://localhost:9411/)
-* Latency and Fault tolerance: [Hystrix](http://localhost:7979/hystrix)
