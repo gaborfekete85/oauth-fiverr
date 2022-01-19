@@ -6,6 +6,7 @@
 * Java 11+
 * Maven installed ( configured using JAVA_HOME above )
 * Docker
+* PostMan
 * *IDE: IntelliJ*
 
 ## Architecture overview
